@@ -807,6 +807,45 @@ button {
   line-height: 1.5;
 }
 
+.semantic-injection-list .layer-row em {
+  display: inline-flex;
+  width: fit-content;
+  margin-top: 8px;
+  padding: 4px 7px;
+  color: #052012;
+  background: rgba(134, 239, 172, 0.88);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 900;
+}
+
+.injection-summary {
+  display: grid;
+  gap: 10px;
+  margin: 14px 0;
+}
+
+.injection-summary div {
+  padding: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: rgba(15, 23, 42, 0.54);
+}
+
+.injection-summary span,
+.injection-summary strong {
+  display: block;
+}
+
+.injection-summary span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.injection-summary strong {
+  margin-top: 6px;
+  color: var(--text);
+}
+
 .example-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
@@ -1893,6 +1932,208 @@ button {
   text-align: right;
 }
 
+.static-semantic-page {
+  overflow: hidden;
+}
+
+.semantic-generation-board {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 0.58fr);
+  gap: 14px;
+  align-items: stretch;
+  margin-top: 16px;
+}
+
+.semantic-world-preview,
+.static-semantic-list {
+  min-width: 0;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: rgba(2, 8, 18, 0.46);
+}
+
+.semantic-world-preview {
+  position: relative;
+  min-height: 520px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 56% 48%, rgba(34, 211, 238, 0.22), transparent 22%),
+    linear-gradient(132deg, rgba(22, 101, 52, 0.36), transparent 42%),
+    repeating-linear-gradient(90deg, rgba(148, 163, 184, 0.05) 0 1px, transparent 1px 42px),
+    repeating-linear-gradient(0deg, rgba(148, 163, 184, 0.05) 0 1px, transparent 1px 42px),
+    rgba(2, 8, 18, 0.8);
+}
+
+.semantic-map-water {
+  position: absolute;
+  inset: 25% 18% 23% 18%;
+  border-radius: 44% 56% 42% 58% / 46% 38% 62% 54%;
+  background: rgba(34, 211, 238, 0.24);
+  box-shadow: inset 0 0 32px rgba(229, 250, 255, 0.18);
+}
+
+.semantic-map-road {
+  position: absolute;
+  height: 5px;
+  background: rgba(226, 232, 240, 0.2);
+  transform-origin: center;
+}
+
+.semantic-map-road--one {
+  top: 33%;
+  left: 5%;
+  width: 88%;
+  transform: rotate(-11deg);
+}
+
+.semantic-map-road--two {
+  top: 68%;
+  left: 12%;
+  width: 78%;
+  transform: rotate(15deg);
+}
+
+.semantic-map-block {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  color: rgba(226, 232, 240, 0.74);
+  border: 1px solid rgba(148, 163, 184, 0.26);
+  background: rgba(15, 23, 42, 0.66);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.semantic-map-block--one {
+  top: 13%;
+  right: 12%;
+  width: 142px;
+  height: 94px;
+}
+
+.semantic-map-block--two {
+  right: 24%;
+  bottom: 12%;
+  width: 118px;
+  height: 76px;
+}
+
+.static-semantic-overlay {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  color: rgba(226, 232, 240, 0.9);
+  border: 2px solid;
+  font-size: 12px;
+  font-weight: 900;
+  animation: semanticPulse 1.8s ease-in-out infinite;
+}
+
+.static-semantic-overlay--object {
+  top: 12%;
+  right: 9%;
+  width: 180px;
+  height: 128px;
+}
+
+.static-semantic-overlay--space {
+  inset: 24% 20% 24% 20%;
+  border-radius: 44% 56% 46% 54% / 48% 38% 62% 52%;
+}
+
+.static-semantic-overlay--flight {
+  top: 18%;
+  left: 9%;
+  right: 11%;
+  height: 72%;
+  border-style: dashed;
+}
+
+.static-semantic-overlay--relation {
+  left: 15%;
+  bottom: 16%;
+  width: 220px;
+  height: 126px;
+  transform: rotate(8deg);
+}
+
+.static-semantic-list {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  padding: 16px;
+}
+
+.static-semantic-list h3 {
+  margin-top: 0;
+}
+
+.static-semantic-card {
+  display: grid;
+  gap: 6px;
+  width: 100%;
+  padding: 12px;
+  color: var(--text);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: rgba(15, 23, 42, 0.48);
+  text-align: left;
+}
+
+.static-semantic-card.is-on {
+  border-color: rgba(34, 211, 238, 0.44);
+  background: rgba(34, 211, 238, 0.09);
+}
+
+.static-semantic-card__head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.static-semantic-card__head i {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+}
+
+.static-semantic-card__head em {
+  color: var(--green);
+  font-style: normal;
+  font-weight: 900;
+}
+
+.static-semantic-card small,
+.static-semantic-card span:not(.static-semantic-card__head) {
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.static-semantic-output {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid rgba(34, 197, 94, 0.22);
+  background: rgba(34, 197, 94, 0.07);
+}
+
+.static-semantic-output span,
+.static-semantic-output strong {
+  display: block;
+}
+
+.static-semantic-output span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.static-semantic-output strong {
+  margin-top: 4px;
+  color: var(--text);
+}
+
 @keyframes semanticPulse {
   0%,
   100% {
@@ -1946,7 +2187,8 @@ button {
   .risk-layout,
   .semantic-workbench,
   .semantic-lower-grid,
-  .view-generation-layout {
+  .view-generation-layout,
+  .semantic-generation-board {
     grid-template-columns: 1fr;
   }
 
@@ -2006,6 +2248,11 @@ button {
   }
 
   .semantic-output-bar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .static-semantic-output {
     align-items: flex-start;
     flex-direction: column;
   }
