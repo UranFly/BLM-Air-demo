@@ -62,6 +62,8 @@ function getCompletedPage(state: DemoState): number {
 
 export default function App() {
   const [state, setState] = useState<DemoState>(() => createInitialState());
+  const [demoSignal, setDemoSignal] = useState(0);
+  const [resetSignal, setResetSignal] = useState(0);
   const currentNavItem = useMemo(() => navItems.find((item) => item.id === state.currentPage) ?? navItems[0], [state.currentPage]);
   const completedPage = getCompletedPage(state);
 
@@ -79,6 +81,7 @@ export default function App() {
 
   function startDemo() {
     setState((current) => ({ ...current, currentPage: 0 }));
+    setDemoSignal((current) => current + 1);
   }
 
   function setParsedTask(activeTask: Task) {
@@ -153,6 +156,8 @@ export default function App() {
 
   function resetDemo() {
     setState(createInitialState());
+    setDemoSignal(0);
+    setResetSignal((current) => current + 1);
   }
 
   return (
@@ -165,7 +170,7 @@ export default function App() {
             <span>{String(currentNavItem.id + 1).padStart(2, "0")}</span>
             <h2>{currentNavItem.title}</h2>
           </div>
-          {state.currentPage === 0 && <SemanticGenerationPage goNext={goNext} />}
+          {state.currentPage === 0 && <SemanticGenerationPage key={`semantic-generation-${resetSignal}`} goNext={goNext} autoDemoSignal={demoSignal} />}
           {state.currentPage === 1 && <FlightViewGenerationPage goNext={goNext} />}
           {state.currentPage === 2 && <WorldOverviewPage state={state} goNext={goNext} />}
           {state.currentPage === 3 && <SemanticLayersPage state={state} setLayers={setLayers} goNext={goNext} />}

@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useState, type ChangeEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
 
 type PageProps = {
   goNext: () => void;
+  autoDemoSignal?: number;
 };
 
 type GenerationStatus = "empty" | "generating" | "generated";
@@ -74,12 +75,13 @@ const pipelineSteps = [
   ["语义生成", "输出可查询、可推演、可渲染的世界模型"]
 ];
 
-export function SemanticGenerationPage({ goNext }: PageProps) {
+export function SemanticGenerationPage({ goNext, autoDemoSignal = 0 }: PageProps) {
   const [status, setStatus] = useState<GenerationStatus>("empty");
   const [videoName, setVideoName] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
   const [activeLayers, setActiveLayers] = useState<Set<string>>(() => new Set());
   const [manualItems, setManualItems] = useState<string[]>(["临时起降区", "重点巡检对象"]);
+  const lastAutoDemoSignalRef = useRef(0);
 
   const generatedCount = activeLayers.size;
   const statusText = useMemo(() => {
@@ -92,6 +94,17 @@ export function SemanticGenerationPage({ goNext }: PageProps) {
     if (!videoUrl) return;
     return () => URL.revokeObjectURL(videoUrl);
   }, [videoUrl]);
+
+  useEffect(() => {
+    if (autoDemoSignal === lastAutoDemoSignalRef.current) return;
+    lastAutoDemoSignalRef.current = autoDemoSignal;
+    if (autoDemoSignal <= 0) return;
+    if (videoUrl) {
+      URL.revokeObjectURL(videoUrl);
+      setVideoUrl("");
+    }
+    runGeneration("示例无人机航拍视频.mp4");
+  }, [autoDemoSignal]);
 
   function runGeneration(fileName: string) {
     setStatus("generating");
