@@ -188,6 +188,42 @@ button {
   gap: 8px;
 }
 
+.nav-group {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(2, 8, 18, 0.34);
+}
+
+.nav-group-title {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1.35;
+}
+
+.nav-group-title span {
+  min-width: 0;
+}
+
+.nav-group-title em {
+  flex: 0 0 auto;
+  padding: 3px 6px;
+  color: #06111f;
+  background: rgba(34, 211, 238, 0.86);
+  font-style: normal;
+}
+
+.nav-group-list {
+  display: grid;
+  gap: 7px;
+}
+
 .nav-item {
   display: grid;
   grid-template-columns: 34px minmax(0, 1fr) auto;

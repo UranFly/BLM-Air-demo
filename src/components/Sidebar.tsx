@@ -28,23 +28,46 @@ function getStepLabel(index: number, currentPage: number, completedPage: number)
 }
 
 export function Sidebar({ items, currentPage, completedPage, activeTask, onNavigate }: SidebarProps) {
+  const navGroups = [
+    {
+      title: "悠然无界低空世界模型BLM-Air",
+      range: "01-05",
+      items: items.filter((item) => item.id <= 4),
+    },
+    {
+      title: "悠然低空运营智能体UranFlyAgent",
+      range: "06-11",
+      items: items.filter((item) => item.id >= 5),
+    },
+  ];
+
   return (
     <aside className="sidebar">
       <div className="sidebar-section">
-        <div className="sidebar-label">任务流</div>
+        <div className="sidebar-label">演示任务流</div>
         <div className="task-title">{activeTask?.title ?? "等待创建任务"}</div>
       </div>
       <nav className="nav-list" aria-label="演示页面导航">
-        {items.map((item) => (
-          <button
-            key={item.id}
-            className={`nav-item ${currentPage === item.id ? "is-active" : ""}`}
-            onClick={() => onNavigate(item.id)}
-          >
-            <span className="nav-index">{String(item.id + 1).padStart(2, "0")}</span>
-            <span className="nav-title">{item.shortTitle}</span>
-            <StatusBadge label={getStepLabel(item.id, currentPage, completedPage)} tone={getStepTone(item.id, currentPage, completedPage)} />
-          </button>
+        {navGroups.map((group) => (
+          <section className="nav-group" key={group.title} aria-label={group.title}>
+            <div className="nav-group-title">
+              <span>{group.title}</span>
+              <em>{group.range}</em>
+            </div>
+            <div className="nav-group-list">
+              {group.items.map((item) => (
+                <button
+                  key={item.id}
+                  className={`nav-item ${currentPage === item.id ? "is-active" : ""}`}
+                  onClick={() => onNavigate(item.id)}
+                >
+                  <span className="nav-index">{String(item.id + 1).padStart(2, "0")}</span>
+                  <span className="nav-title">{item.shortTitle}</span>
+                  <StatusBadge label={getStepLabel(item.id, currentPage, completedPage)} tone={getStepTone(item.id, currentPage, completedPage)} />
+                </button>
+              ))}
+            </div>
+          </section>
         ))}
       </nav>
     </aside>
