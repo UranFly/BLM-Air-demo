@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="悠然智飞森林防火低空世界模型演示，展示三维空间、动态感知、语义理解、规则约束、风险推演、云边协同与结果闭环。"
+    />
+    <title>悠然智飞｜森林防火低空世界模型</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      window._AMapSecurityConfig = {
+        securityJsCode: "%VITE_AMAP_SECURITY_CODE%",
+      };
+    </script>
+    <script src="https://webapi.amap.com/maps?v=2.0&key=%VITE_AMAP_KEY%"></script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
