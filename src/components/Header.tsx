@@ -24,8 +24,8 @@ export function Header({ activeTask, onStartDemo, onReset }: HeaderProps) {
     <header className="app-header">
       <div>
         <div className="brand-mark">悠然智飞</div>
-        <h1>通用低空世界模型演示</h1>
-        <p>面向低空任务的世界模型推演系统</p>
+        <h1>低空运营智能体功能演示</h1>
+        <p>面向低空经济的低空运营智能体平台</p>
       </div>
       <div className="header-actions">
         {activeTask && <span className="header-task">{activeTask.title}</span>}
