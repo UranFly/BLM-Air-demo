@@ -4,6 +4,7 @@ import { Sidebar, type NavItem } from "./components/Sidebar";
 import { WorldOverviewPage } from "./pages/WorldOverviewPage";
 import { SemanticLayersPage } from "./pages/SemanticLayersPage";
 import { SemanticGenerationPage } from "./pages/SemanticGenerationPage";
+import { FlightViewGenerationPage } from "./pages/FlightViewGenerationPage";
 import { TaskIntentPage } from "./pages/TaskIntentPage";
 import { ResourceDispatchPage } from "./pages/ResourceDispatchPage";
 import { RoutePlanningPage } from "./pages/RoutePlanningPage";
@@ -14,15 +15,16 @@ import { dynamicEvents } from "./data/mockData";
 import type { DemoState, DynamicEvent, LayerState, MissionReport, RiskItem, Route, Task } from "./types";
 
 const navItems: NavItem[] = [
-  { id: 0, title: "影像图传语义生成页", shortTitle: "语义生成" },
-  { id: 1, title: "低空世界总览", shortTitle: "世界总览" },
-  { id: 2, title: "语义图层管理", shortTitle: "语义图层" },
-  { id: 3, title: "自然语言任务入口", shortTitle: "任务意图" },
-  { id: 4, title: "资源调度页", shortTitle: "资源调度" },
-  { id: 5, title: "航线规划与候选方案页", shortTitle: "航线规划" },
-  { id: 6, title: "风险推演页", shortTitle: "风险推演" },
-  { id: 7, title: "任务执行与动态重规划页", shortTitle: "执行重规划" },
-  { id: 8, title: "结果交付与数据闭环页", shortTitle: "结果闭环" }
+  { id: 0, title: "物理世界重建页", shortTitle: "世界重建" },
+  { id: 1, title: "第一视角生成页", shortTitle: "视角生成" },
+  { id: 2, title: "低空世界总览", shortTitle: "世界总览" },
+  { id: 3, title: "语义图层管理", shortTitle: "语义图层" },
+  { id: 4, title: "自然语言任务入口", shortTitle: "任务意图" },
+  { id: 5, title: "资源调度页", shortTitle: "资源调度" },
+  { id: 6, title: "航线规划与候选方案页", shortTitle: "航线规划" },
+  { id: 7, title: "风险推演页", shortTitle: "风险推演" },
+  { id: 8, title: "任务执行与动态重规划页", shortTitle: "执行重规划" },
+  { id: 9, title: "结果交付与数据闭环页", shortTitle: "结果闭环" }
 ];
 
 const initialLayers: LayerState = {
@@ -47,15 +49,15 @@ function createInitialState(): DemoState {
 }
 
 function getCompletedPage(state: DemoState): number {
-  if (!state.activeTask) return 2;
-  if (state.activeTask.status === "reported") return 8;
-  if (state.activeTask.status === "completed") return 7;
-  if (["executing", "event_detected", "replanned"].includes(state.activeTask.status)) return 6;
-  if (state.activeTask.status === "risk_reviewed") return 6;
-  if (state.activeTask.status === "planned") return 5;
-  if (state.selectedDroneId && state.selectedDockId) return 4;
-  if (state.activeTask.status === "parsed") return 3;
-  return 2;
+  if (!state.activeTask) return 3;
+  if (state.activeTask.status === "reported") return 9;
+  if (state.activeTask.status === "completed") return 8;
+  if (["executing", "event_detected", "replanned"].includes(state.activeTask.status)) return 7;
+  if (state.activeTask.status === "risk_reviewed") return 7;
+  if (state.activeTask.status === "planned") return 6;
+  if (state.selectedDroneId && state.selectedDockId) return 5;
+  if (state.activeTask.status === "parsed") return 4;
+  return 3;
 }
 
 export default function App() {
@@ -164,36 +166,37 @@ export default function App() {
             <h2>{currentNavItem.title}</h2>
           </div>
           {state.currentPage === 0 && <SemanticGenerationPage goNext={goNext} />}
-          {state.currentPage === 1 && <WorldOverviewPage state={state} goNext={goNext} />}
-          {state.currentPage === 2 && <SemanticLayersPage state={state} setLayers={setLayers} goNext={goNext} />}
-          {state.currentPage === 3 && <TaskIntentPage activeTask={state.activeTask} onTaskParsed={setParsedTask} goNext={goNext} />}
-          {state.currentPage === 4 && (
-            <ResourceDispatchPage state={state} onConfirmResource={confirmResourceSelection} goNext={goNext} goToTaskPage={() => setCurrentPage(3)} />
-          )}
+          {state.currentPage === 1 && <FlightViewGenerationPage goNext={goNext} />}
+          {state.currentPage === 2 && <WorldOverviewPage state={state} goNext={goNext} />}
+          {state.currentPage === 3 && <SemanticLayersPage state={state} setLayers={setLayers} goNext={goNext} />}
+          {state.currentPage === 4 && <TaskIntentPage activeTask={state.activeTask} onTaskParsed={setParsedTask} goNext={goNext} />}
           {state.currentPage === 5 && (
+            <ResourceDispatchPage state={state} onConfirmResource={confirmResourceSelection} goNext={goNext} goToTaskPage={() => setCurrentPage(4)} />
+          )}
+          {state.currentPage === 6 && (
             <RoutePlanningPage
               state={state}
               onConfirmRoute={confirmRoutePlanning}
               goNext={goNext}
-              goToTaskPage={() => setCurrentPage(3)}
-              goToResourcePage={() => setCurrentPage(4)}
+              goToTaskPage={() => setCurrentPage(4)}
+              goToResourcePage={() => setCurrentPage(5)}
             />
           )}
-          {state.currentPage === 6 && (
+          {state.currentPage === 7 && (
             <RiskSimulationPage
               state={state}
               onConfirmRisk={confirmRiskReview}
               goNext={goNext}
-              goToRoutePage={() => setCurrentPage(5)}
-              goToTaskPage={() => setCurrentPage(3)}
+              goToRoutePage={() => setCurrentPage(6)}
+              goToTaskPage={() => setCurrentPage(4)}
             />
           )}
-          {state.currentPage === 7 && <ExecutionReplanningPage state={state} onExecutionUpdate={updateExecutionState} goNext={goNext} goToRiskPage={() => setCurrentPage(6)} />}
-          {state.currentPage === 8 && (
+          {state.currentPage === 8 && <ExecutionReplanningPage state={state} onExecutionUpdate={updateExecutionState} goNext={goNext} goToRiskPage={() => setCurrentPage(7)} />}
+          {state.currentPage === 9 && (
             <ResultDataLoopPage
               state={state}
               onReportGenerated={setMissionReport}
-              goToExecutionPage={() => setCurrentPage(7)}
+              goToExecutionPage={() => setCurrentPage(8)}
               returnOverview={() => setCurrentPage(0)}
               resetDemo={resetDemo}
             />

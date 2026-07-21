@@ -18,60 +18,60 @@ type GeneratedLayer = {
 const generatedLayers: GeneratedLayer[] = [
   {
     id: "space",
-    name: "空间区域语义",
-    source: "地图底图 + 视频抽帧",
-    confidence: 92,
+    name: "三维空间结构",
+    source: "卫星地图 + 视频多帧配准",
+    confidence: 94,
     color: "#22d3ee",
-    description: "从兴隆湖水域、道路、绿地、建筑和广场边界生成可计算的空间面。"
+    description: "重建湖岸、水域、道路、建筑、绿地和广场的空间边界，形成可计算的三维场景。"
   },
   {
     id: "airspace",
-    name: "空域规则",
-    source: "地图边界 + 人工规则",
-    confidence: 88,
+    name: "低空通行空间",
+    source: "重建高度场 + 空域规则",
+    confidence: 89,
     color: "#f59e0b",
-    description: "结合湖面、道路、人群和敏感区域推导限高、禁飞、缓冲区和临时管制。"
+    description: "根据建筑高度、水域边界和敏感区域生成可飞、限高、缓冲和禁飞空间。"
   },
   {
     id: "resources",
-    name: "资源网络",
+    name: "资源与落点网络",
     source: "起降点 + 飞行轨迹",
     confidence: 95,
     color: "#22c55e",
-    description: "把起降点、无人机航迹、返航半径和可用载荷组织成调度资源图。"
+    description: "把起降点、候选落点、返航半径、载荷能力和通信覆盖组织成资源网络。"
   },
   {
     id: "risk",
-    name: "风险环境",
-    source: "视频识别 + 实时气象",
-    confidence: 84,
+    name: "动态风险环境",
+    source: "视频识别 + 气象修正",
+    confidence: 86,
     color: "#ef4444",
-    description: "识别障碍物、人群密度、通信弱覆盖、阵风和降雨风险，支持动态避让。"
+    description: "识别人群、车辆、临时施工、遮挡物、通信弱覆盖和气象扰动。"
   },
   {
     id: "task",
-    name: "任务语义",
-    source: "高德兴趣点 + 业务目标",
+    name: "任务可理解对象",
+    source: "兴趣点 + 视觉目标",
     confidence: 90,
     color: "#a78bfa",
-    description: "把巡检、配送、应急、安防等目标映射成任务点、优先级和交付物。"
+    description: "把巡检对象、应急点、配送点和安全关注点转成可调度的任务语义。"
   }
 ];
 
 const manualSemantics = ["临时起降区", "临时禁飞区", "人群聚集点", "应急通道", "重点巡检对象"];
 
 const connectorCards = [
-  ["高德地图数据", "兴隆湖底图、水域边界、道路结构、建筑轮廓"],
-  ["高德兴趣点数据", "园区、道路、服务点、公共设施进入任务语义层"],
-  ["实时气象数据", "风速、风向、降雨、能见度进入风险环境层"],
-  ["无人机图传视频", "实时识别水岸、障碍物、人群、施工和临时变化"]
+  ["卫星地图数据", "提供正射底图、水域边界、道路结构和建筑轮廓"],
+  ["无人机航拍视频", "提供多视角细节、临时变化、遮挡关系和地面活动"],
+  ["高德兴趣点数据", "提供园区、道路、服务点、公共设施和任务目标名称"],
+  ["实时气象数据", "提供风速、风向、降雨、能见度和气象风险修正"]
 ];
 
 const pipelineSteps = [
-  ["抽帧", "从上传视频提取关键帧"],
-  ["配准", "对齐高德底图与水域边界"],
-  ["识别", "分割道路、水域、建筑和活动区域"],
-  ["生成", "输出可开关的低空语义图层"]
+  ["视频抽帧", "从航拍视频提取稳定关键帧"],
+  ["地图配准", "对齐卫星底图、水域边界和相机位姿"],
+  ["世界重建", "恢复建筑、道路、水域、绿地和障碍物"],
+  ["语义生成", "输出可查询、可推演、可渲染的世界模型"]
 ];
 
 export function SemanticGenerationPage({ goNext }: PageProps) {
@@ -84,8 +84,8 @@ export function SemanticGenerationPage({ goNext }: PageProps) {
   const generatedCount = activeLayers.size;
   const statusText = useMemo(() => {
     if (status === "empty") return "等待上传无人机飞行视频";
-    if (status === "generating") return "正在结合地图数据生成语义";
-    return "语义图层已生成";
+    if (status === "generating") return "正在重建物理世界";
+    return "完整物理世界已重建";
   }, [status]);
 
   useEffect(() => {
@@ -129,22 +129,41 @@ export function SemanticGenerationPage({ goNext }: PageProps) {
   return (
     <section className="page-grid page-grid--single">
       <div className="panel panel--wide semantic-generation">
-        <div className="panel-kicker">第一步 · 语义生成</div>
-        <h2>上传无人机飞行视频，自动生成低空语义图层</h2>
+        <div className="panel-kicker">第一步 · 物理世界重建</div>
+        <h2>上传无人机航拍视频，生成完整低空物理世界</h2>
         <p className="page-lead">
-          先把真实地图数据作为空间基准，再接入该区域的无人机飞行图传视频。系统会自动抽帧、配准、识别和融合，生成空间区域、空域规则、资源网络、风险环境和任务语义；人工仍可继续补充临时语义。
+          先把卫星地图作为空间基准，再接入该区域的无人机航拍视频。系统会自动抽帧、估计相机位姿、对齐地图数据、恢复建筑与地面空间，并生成可查询、可推演、可渲染的低空物理世界模型。
         </p>
 
         <div className="semantic-upload-row">
           <label className={`video-upload-card ${status !== "empty" ? "has-video" : ""}`}>
             <input type="file" accept="video/*" onChange={handleVideoUpload} />
-            <span>{status === "empty" ? "上传无人机飞行视频" : "更换飞行视频"}</span>
-            <strong>{videoName || "支持本地视频文件，上传后自动生成语义"}</strong>
+            <span>{status === "empty" ? "上传无人机航拍视频" : "更换航拍视频"}</span>
+            <strong>{videoName || "上传后自动生成区域物理世界重建"}</strong>
           </label>
           <div className={`generation-status-card generation-status-card--${status}`}>
             <span>生成状态</span>
             <strong>{statusText}</strong>
-            <small>地图基准：高德兴隆湖底图、水域边界、起降资源点、道路与兴趣点数据</small>
+            <small>地图基准：卫星底图、兴隆湖水域边界、道路结构、起降资源点和兴趣点数据</small>
+          </div>
+        </div>
+
+        <div className="reconstruction-metrics">
+          <div>
+            <span>重建范围</span>
+            <strong>{status === "empty" ? "待生成" : "2.8 平方公里"}</strong>
+          </div>
+          <div>
+            <span>空间对象</span>
+            <strong>{status === "empty" ? "待生成" : "438 个"}</strong>
+          </div>
+          <div>
+            <span>可飞体素</span>
+            <strong>{status === "empty" ? "待生成" : "12.6 万"}</strong>
+          </div>
+          <div>
+            <span>可渲染视角</span>
+            <strong>{status === "empty" ? "待生成" : "任意轨迹"}</strong>
           </div>
         </div>
 
@@ -167,8 +186,12 @@ export function SemanticGenerationPage({ goNext }: PageProps) {
               <span className="road-line road-line--two"></span>
               <span className="building-cluster building-cluster--one"></span>
               <span className="building-cluster building-cluster--two"></span>
-              <span className="flight-frame flight-frame--one">图传帧一</span>
-              <span className="flight-frame flight-frame--two">图传帧二</span>
+              <span className="reconstruction-mesh reconstruction-mesh--one"></span>
+              <span className="reconstruction-mesh reconstruction-mesh--two"></span>
+              <span className="height-column height-column--one">建筑高度</span>
+              <span className="height-column height-column--two">树阵障碍</span>
+              <span className="flight-frame flight-frame--one">关键帧一</span>
+              <span className="flight-frame flight-frame--two">关键帧二</span>
               {(status === "generating" || status === "generated") &&
                 generatedLayers.map(
                   (layer, index) =>
@@ -186,12 +209,13 @@ export function SemanticGenerationPage({ goNext }: PageProps) {
                     {item}
                   </span>
                 ))}
-              {status === "empty" && <div className="semantic-empty-mask">上传飞行视频后，系统将在地图基准上自动生成语义图层</div>}
+              {status === "generated" && <div className="world-model-badge">物理世界重建完成 · 支持任意第一视角生成</div>}
+              {status === "empty" && <div className="semantic-empty-mask">上传航拍视频后，系统将在地图基准上生成完整物理世界重建</div>}
             </div>
           </div>
 
           <div className="semantic-layer-panel">
-            <h3>自动生成结果</h3>
+            <h3>重建结果</h3>
             <div className="generated-layer-list">
               {generatedLayers.map((layer) => (
                 <button
@@ -216,8 +240,8 @@ export function SemanticGenerationPage({ goNext }: PageProps) {
 
         <div className="semantic-lower-grid">
           <div className="semantic-manual-panel">
-            <h3>人工补充语义</h3>
-            <p>自动生成后，业务人员可以继续追加临时规则和现场判断，补充结果进入同一套语义图层版本。</p>
+            <h3>人工补充世界知识</h3>
+            <p>重建完成后，业务人员可以继续追加临时规则和现场判断，补充结果进入同一套世界模型版本。</p>
             <div className="manual-chip-list">
               {manualSemantics.map((item) => (
                 <button key={item} className={`manual-chip ${manualItems.includes(item) ? "is-on" : ""}`} type="button" onClick={() => toggleManualItem(item)}>
@@ -228,7 +252,7 @@ export function SemanticGenerationPage({ goNext }: PageProps) {
           </div>
 
           <div className="semantic-connector-panel">
-            <h3>参与生成的数据源</h3>
+            <h3>参与重建的数据源</h3>
             <div className="connector-grid">
               {connectorCards.map(([title, description]) => (
                 <div key={title}>
@@ -243,13 +267,13 @@ export function SemanticGenerationPage({ goNext }: PageProps) {
         <div className="semantic-output-bar">
           <div>
             <span>当前输出</span>
-            <strong>{status === "empty" ? "等待视频输入" : `${generatedCount} 类自动语义 · ${manualItems.length} 类人工语义`}</strong>
+            <strong>{status === "empty" ? "等待视频输入" : `${generatedCount} 类世界模型图层 · ${manualItems.length} 类人工知识`}</strong>
           </div>
           <div className="semantic-output-actions">
             <button className="button button--secondary" disabled={status === "empty"} onClick={() => runGeneration(videoName || "飞行视频")}>
-              重新生成语义
+              重新重建世界
             </button>
-            <button className="button" disabled={status !== "generated"} onClick={goNext}>进入世界总览</button>
+            <button className="button" disabled={status !== "generated"} onClick={goNext}>进入第一视角生成</button>
           </div>
         </div>
       </div>
