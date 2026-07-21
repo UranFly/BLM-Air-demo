@@ -1,7 +1,7 @@
 import { useMemo } from "react";
-import { MapCanvas } from "../components/MapCanvas";
+import { AmapMissionMap } from "../components/AmapMissionMap";
 import { StatusBadge } from "../components/StatusBadge";
-import { airspaceZones, areas, docks, drones, obstacles, riskZones } from "../data/mockData";
+import { docks, drones } from "../data/mockData";
 import type { DemoState, Dock, Drone } from "../types";
 import { recommendResources } from "../utils/resourceMatcher";
 
@@ -126,16 +126,7 @@ export function ResourceDispatchPage({ state, onConfirmResource, goNext, goToTas
           </div>
 
           <div className="dispatch-map">
-            <MapCanvas
-              areas={areas}
-              airspaceZones={airspaceZones}
-              obstacles={obstacles}
-              riskZones={riskZones}
-              docks={docks}
-              drones={drones}
-              activeTask={state.activeTask}
-              enabledLayers={state.enabledLayers}
-            />
+            <AmapMissionMap state={state} title="资源调度地图" mode="resources" />
           </div>
         </div>
       </div>

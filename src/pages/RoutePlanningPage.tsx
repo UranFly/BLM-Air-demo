@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
-import { MapCanvas } from "../components/MapCanvas";
+import { AmapMissionMap } from "../components/AmapMissionMap";
 import { StatusBadge } from "../components/StatusBadge";
-import { airspaceZones, areas, docks, drones, obstacles, riskZones } from "../data/mockData";
+import { docks } from "../data/mockData";
 import type { DemoState, Route } from "../types";
 import { planRoutes } from "../utils/routePlanner";
 
@@ -100,18 +100,7 @@ export function RoutePlanningPage({ state, onConfirmRoute, goNext, goToTaskPage,
           </div>
 
           <div className="route-map">
-            <MapCanvas
-              areas={areas}
-              airspaceZones={airspaceZones}
-              obstacles={obstacles}
-              riskZones={riskZones}
-              docks={docks}
-              drones={drones}
-              routes={generatedRoutes}
-              selectedRouteId={selectedRouteId}
-              activeTask={state.activeTask}
-              enabledLayers={state.enabledLayers}
-            />
+            <AmapMissionMap state={state} title="航线规划地图" routes={generatedRoutes} selectedRouteId={selectedRouteId} mode="routes" />
           </div>
         </div>
       </div>

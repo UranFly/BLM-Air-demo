@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { MapCanvas } from "../components/MapCanvas";
+import { AmapMissionMap } from "../components/AmapMissionMap";
 import { StatusBadge } from "../components/StatusBadge";
-import { airspaceZones, areas, docks, drones, obstacles, riskZones } from "../data/mockData";
+import { drones } from "../data/mockData";
 import type { DemoState, DynamicEvent, Route, Task } from "../types";
 import { createReplannedRoute, estimateBattery, getCurrentWaypointIndex, getPointAtProgress } from "../utils/executionEngine";
 
@@ -162,19 +162,14 @@ export function ExecutionReplanningPage({ state, onExecutionUpdate, goNext, goTo
         </div>
 
         <div className="execution-map">
-          <MapCanvas
-            areas={areas}
-            airspaceZones={airspaceZones}
-            obstacles={obstacles}
-            riskZones={riskZones}
-            docks={docks}
-            drones={drones}
+          <AmapMissionMap
+            state={state}
+            title="执行重规划地图"
             routes={displayedRoutes}
             selectedRouteId={state.activeRouteId}
-            activeTask={state.activeTask}
             activeDronePosition={dronePosition}
-            enabledLayers={state.enabledLayers}
             temporaryControlActive={eventTriggered}
+            mode="execution"
           />
         </div>
       </div>

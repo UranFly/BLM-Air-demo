@@ -1,7 +1,7 @@
 import { useMemo } from "react";
-import { MapCanvas } from "../components/MapCanvas";
+import { AmapMissionMap } from "../components/AmapMissionMap";
 import { StatusBadge } from "../components/StatusBadge";
-import { airspaceZones, areas, docks, drones, obstacles, riskZones } from "../data/mockData";
+import { drones } from "../data/mockData";
 import type { DemoState, RiskItem } from "../types";
 import { evaluateRiskDecision, generateRiskItems } from "../utils/riskEngine";
 
@@ -117,18 +117,7 @@ export function RiskSimulationPage({ state, onConfirmRisk, goNext, goToRoutePage
           </div>
 
           <div className="risk-map">
-            <MapCanvas
-              areas={areas}
-              airspaceZones={airspaceZones}
-              obstacles={obstacles}
-              riskZones={riskZones}
-              docks={docks}
-              drones={drones}
-              routes={state.routes}
-              selectedRouteId={selectedRoute.id}
-              activeTask={state.activeTask}
-              enabledLayers={state.enabledLayers}
-            />
+            <AmapMissionMap state={state} title="风险推演地图" routes={state.routes} selectedRouteId={selectedRoute.id} mode="risks" />
           </div>
         </div>
       </div>
