@@ -197,12 +197,10 @@ button {
 }
 
 .nav-group-title {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  justify-content: space-between;
+  display: grid;
+  gap: 3px;
   color: var(--text);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 900;
   line-height: 1.35;
 }
@@ -212,11 +210,13 @@ button {
 }
 
 .nav-group-title em {
-  flex: 0 0 auto;
-  padding: 3px 6px;
-  color: #06111f;
-  background: rgba(34, 211, 238, 0.86);
+  width: fit-content;
+  color: var(--cyan);
   font-style: normal;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0;
+  opacity: 0.88;
 }
 
 .nav-group-list {
